@@ -3,7 +3,6 @@ import time
 import json
 
 API_URL = "https://guya.moe/api/series/Kaguya-Wants-To-Be-Confessed-To/"
-CHAPTERS_PER_PULL = 10
 FILENAME = "kaguya.json"
 
 
@@ -24,10 +23,21 @@ def main():
     data = json.loads(data.text)
     slug = data["slug"]
     group_mapping = data["groups"]
-    chapter_set = set(data["chapters"].keys()) - set(current_data["chapters"].keys())
-    for d, _ in zip(
-        sorted(chapter_set, key=lambda a: float(a)), range(CHAPTERS_PER_PULL)
-    ):
+    last_volume = max(
+        [
+            int(v["volume"] if "volume" in v else -1)
+            for v in current_data["chapters"].values()
+        ]
+    )
+    next_volume = last_volume + 1 if last_volume != -1 else 1
+    chapter_set = set(
+        [
+            k
+            for k, v in data["chapters"].items()
+            if "volume" in v and v["volume"] == str(next_volume)
+        ]
+    )
+    for d in sorted(chapter_set, key=lambda a: float(a)):
         current_chapter_groups = data["chapters"][d]["groups"]
         current_chapter_folder = data["chapters"][d]["folder"]
         current_data["chapters"][d] = {
