@@ -23,13 +23,11 @@ def main():
     data = json.loads(data.text)
     slug = data["slug"]
     group_mapping = data["groups"]
-    last_volume = max(
-        [
-            int(v["volume"] if "volume" in v else -1)
-            for v in current_data["chapters"].values()
-        ]
-    )
-    next_volume = last_volume + 1 if last_volume != -1 else 1
+    processed_volumes = [
+        int(v["volume"] if "volume" in v else -1)
+        for v in current_data["chapters"].values()
+    ]
+    next_volume = max(processed_volumes) + 1 if len(processed_volumes) else 1
     chapter_set = set(
         [
             k
