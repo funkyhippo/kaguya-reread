@@ -1,0 +1,22 @@
+name: "cron"
+
+on:
+  schedule:
+    - cron: "*/1 * * * *" # Every 1 minute
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Make changes
+      run: |
+        sudo pip3 install -r requirements.txt
+        python3 main.py
+    - name: Commit and push files
+      run: |
+        git config --local user.email "funkyhippo@f-ck.me"
+        git config --local user.name "funkyhippo"
+        git commit -am "[CI] Update chapters."
+        git push
