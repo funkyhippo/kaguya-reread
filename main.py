@@ -44,7 +44,7 @@ def main():
             "groups": {
                 group_mapping[group]: list(
                     map(
-                        lambda p: f"/media/manga/{slug}/chapters/{current_chapter_folder}/{group}/{p}",
+                        lambda p: f"https://guya.moe/media/manga/{slug}/chapters/{current_chapter_folder}/{group}/{p}",
                         pages,
                     )
                 )
